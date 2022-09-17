@@ -6,6 +6,6 @@ Contributors:
 - Dylan Walker
 - Akshay Desale
 ---
-The goal of this project is to use logic to 
+The goal of this project is to use logic to create a minesweeper solver.
 
 ![alt text](https://upload.wikimedia.org/wikipedia/commons/1/1b/Kmines_Expert_Game_with_Numbers_1-8.png)

@@ -1,4 +1,4 @@
-# Minesweeper
+# N Chess Simulation 
 ### CISC 204 Group Project
 Contributors:
 - Schuyler Good
@@ -6,6 +6,6 @@ Contributors:
 - Dylan Walker
 - Akshay Desale
 ---
-The goal of this project is to use logic to create a minesweeper solver.
+The goal of this project is to use logic to create, a simulation similar to the n-queen's problem.
 
-![alt text](https://upload.wikimedia.org/wikipedia/commons/1/1b/Kmines_Expert_Game_with_Numbers_1-8.png)
+![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Chessboard480.svg/312px-Chessboard480.svg.png)

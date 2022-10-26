@@ -30,7 +30,7 @@ class king(piece):
         self.king_conditions = king_conditions
 
 
-king(name=0, )
+
 
 
 

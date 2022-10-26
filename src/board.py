@@ -1,3 +1,4 @@
+
 def create_board(n):
     board = []
     b = []

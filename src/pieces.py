@@ -5,6 +5,10 @@ class piece:
     def __init__(self, name):
         self.name = name
 
+    def placePiece(self, x, y):
+        print("goofy ahh")
+
+
 class queen(piece):
     def __init__(self, horizontal_conditions, vertical_conditions, diagonal_conditions, *args, **kwargs):
         super(queen, self).__init__(*args, **kwargs)

@@ -19,6 +19,25 @@ class board():
 
         self.b = self.create_board(self.size)
     
+    def __str__(self):
+        """
+        Returns a string representation of the board.\n
+        Parameters:\n
+            None\n
+        Returns:\n
+            String: String representation of the board\n
+        Raises:\n
+            None:
+        """
+        s = ""
+
+        for row in self.b:
+            for e in row:
+                s = s + e + "  "
+            s = s + "\n"  
+
+        return s 
+
     def print(self):
         """
         Prints the board as if it were on a table in front of you.\n
@@ -27,7 +46,7 @@ class board():
         Returns:\n
             None\n
         Raises:\n
-            None\n
+            None
         """
         for row in self.b:
             for e in row:
@@ -40,9 +59,9 @@ class board():
         Parameters:\n
             n: int - the width and height of the board (note, the board is always of form n x n)\n
         Returns:\n
-            b: Board - finished board. The values are all defaulted to 0. The board is stored as a 2D array.\n
+            Board: finished board. The values are all defaulted to 0. The board is stored as a 2D array.\n
         Raises:\n
-            ValueError: if n is less than 0\n
+            ValueError: if n is less than 0
         """
 
         if (n < 0):
@@ -52,7 +71,7 @@ class board():
         r = []
         for i in range(n):
             for j in range(n):
-                r.append(0)
+                r.append("0")
             final.append(r.copy())
             r.clear()
         
@@ -67,7 +86,7 @@ class board():
         Returns:\n
             None\n
         Raises:\n
-            ValueError: if pos is not of length 2 or the values are out of bounds.\n
+            ValueError: if pos is not of length 2 or the values are out of bounds.
         """
 
         if (len(pos) != 2):
@@ -84,9 +103,9 @@ class board():
         Parameters:\n
             None\n
         Returns:\n
-            item: String - String representation of the item at pos.\n
+            String - String representation of the item at pos.\n
         Raises:\n
-            ValueError: if pos is not of length 2 or the values are out of bounds.\n
+            ValueError: if pos is not of length 2 or the values are out of bounds.
         """
 
         if (len(pos) != 2):
@@ -105,3 +124,5 @@ if __name__ == "__main__":
     b.print()
 
     print(b.get((3, 4)))
+
+    print(b)

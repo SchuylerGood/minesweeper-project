@@ -88,6 +88,9 @@ class board():
         Raises:\n
             ValueError: if pos is not of length 2 or the values are out of bounds.
         """
+        
+        if (type(item) != str):
+            raise ValueError("item must be a string object.")
 
         if (len(pos) != 2):
             raise ValueError("pos must be of length 2")
@@ -119,6 +122,9 @@ class board():
 if __name__ == "__main__":
     b = board(8)
     print("\n\n\n")
+
+    s = ""
+    print(type(s))
 
     b.set((3, 4), "H")
     b.print()

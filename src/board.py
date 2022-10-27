@@ -86,7 +86,7 @@ class board():
         Returns:\n
             None\n
         Raises:\n
-            ValueError: if pos is not of length 2 or the values are out of bounds.
+            ValueError: if pos is not of length 2 or the values are out of bounds or if item is not a string.
         """
         
         if (type(item) != str):

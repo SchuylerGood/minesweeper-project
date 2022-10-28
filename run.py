@@ -2,29 +2,16 @@ from bauhaus import Encoding, proposition, constraint
 from bauhaus.utils import count_solutions, likelihood
 
 E = Encoding()
-
-# To create propositions, create classes for them first, annotated with "@proposition" and the Encoding
-
 #============== Propositions ==================
-
-# Example proposition
-# @proposition(E)
-# class BasicPropositions:
-
-#     def __init__(self, data):
-#         self.data = data
-
-#     def __repr__(self):
-#         return f"A.{self.data}"
-
-
 
 # Attack position proposition
 @proposition(E)
 class attack_position_proposition:
-    def __init__(self, i, j):
+    def __init__(self, i, j, f, r):
         self.i = i
         self.j = j
+        self.f = f
+        self.r = r
         # self.ij = position
     
     def __repr__(self):
@@ -33,9 +20,11 @@ class attack_position_proposition:
 # Position proposition
 @proposition(E)
 class piece_position_proposition:
-    def __init__(self, i, j):
+    def __init__(self, i, j, f, r):
         self.i = i
         self.j = j
+        self.f = f
+        self.r = r
     
     def __repr__(self):
         return f"P({self.i},{self.j})"
@@ -111,20 +100,25 @@ class queen_position_proposition:
 #     def __repr__(self):
 #         return f"A.{self.data}"
 
-# Call your variables whatever you want
-x = attack_position_proposition("i","j") # Is true if a piece can attack the position (i, j).
-p = piece_position_proposition("i","j") # Is true when any piece is in position (i, j).
-k = king_position_proposition("i","j") # Is true if there is a King in position (i, j).
-b = bishop_position_proposition("i","j") # Is true if there is a Bishop in position (i, j).
-r = rook_position_proposition("i","j") # Is true if there is a Rook in position (i, j).
-h = knight_position_proposition("i","j") # Is true if there is a Knight in position (i, j).
-q = queen_position_proposition("i","j") # Is true if there is a Queen in position (i, j).
-
+# Temporary varialbes that will be replaced with actual values later on
+n = "Size of the board"
 f = "file" # file is a chess term for column of the board
-n = "n"
-m = "m"
-j = "j-position"
 r = "row"
+m = "m scalar for i & j, (diagonals)"
+i = "i-position"
+j = "j-position"
+
+# Base propositions, to be used in the constraints
+x = attack_position_proposition(i,j,f,r) # Is true if a piece can attack the position (i, j).
+p = piece_position_proposition(i,j,f,r) # Is true when any piece is in position (i, j).
+k = king_position_proposition(i,j) # Is true if there is a King in position (i, j).
+b = bishop_position_proposition(i,j) # Is true if there is a Bishop in position (i, j).
+r = rook_position_proposition(i,j) # Is true if there is a Rook in position (i, j).
+h = knight_position_proposition(i,j) # Is true if there is a Knight in position (i, j).
+q = queen_position_proposition(i,j) # Is true if there is a Queen in position (i, j).
+
+
+
 
 # At least one of these will be true
 # x = FancyPropositions("x")
@@ -142,24 +136,24 @@ def example_theory():
     #==========  Current Constraints  ================
 
     # Queen Constraint 1:
-    E.add_constraint(q >> ("∀.f" (x.i ,f)) & ("∀.r" (x.r,j)) & ("∀.m" (x.i+m,j+m) & (x.i+m,j-m) & (x.i-m,j+m) & (x.i-m,j-m)))
-    E.add_constraint(q >> (p) & (k | h | r | b))
+    E.add_constraint(q >> ("∀.f" (x.i ,x.f)) & ("∀.r" (x.r,x.j)) & ("∀.m" (x.i+m,x.j+m) & (x.i+m,x.j-m) & (x.i-m,x.j+m) & (x.i-m,x.j-m)))
+    E.add_constraint(q >> (p) & ~(k | h | r | b))
 
     # Queen Constraint 2:
-    E.add_constraint(("∀.f" (~p.i,f)) & ("∀.r" (~p.r,j)) & ("∀.m" (~(p.i+m, j+m) | ~(p.i+m, j-m) | ~(p.i-m, j+m) | ~(p.i-m, j-m))) >> q)
+    E.add_constraint(("∀.f" (~p.i,x.f)) & ("∀.r" (~p.r,~p.j)) & ("∀.m" (~(p.i+m, p.j+m) | ~(p.i+m, p.j-m) | ~(p.i-m, p.j+m) | ~(p.i-m, p.j-m))) >> q)
 
 
     # King Constraint 1:
-    E.add_constraint(k >> ((x.i-1,j-1) & (x-1,j) & (x.i-1,j+1) & (x.i,j-1 & x.i,j+1) & (x.i+1,j-1) & (x.i+1,j) & (x.i+1,j+1)))
-    E.add_constraint(k >> (p) & (q | h | r | b))
+    E.add_constraint(k >> ((x.i-1,x.j-1) & (x.i-1,x.j) & (x.i-1,x.j+1) & (x.i,x.j-1) & (x.i,x.j+1) & (x.i+1,x.j-1) & (x.i+1,x.j) & (x.i+1,x.j+1)))
+    E.add_constraint(k >> (p) & ~(q | h | r | b))
 
     # King Constraint 2:
     E.add_constraint(~(p.i-1, p.j-1 | p.i-1, p.j | p.i-1, p.j+1 | p.i, p.j-1 | p.i,p.j+1 | p.i+1, p.j-1 | p.i+1, p.j | p.i+1, p.j+1) >> k)
 
 
     # Knight Constraint 1:
-    E.add_constraint(h >> ((x.i-2,j-1) & (x.i-2,j+1) & (x.i-1,j-2) & (x.i-1,j+2) & (x.i+1,j-2) & (x.i+1,j+2) & (x.i+2,j-1) & (x.i+2,j+1)))
-    E.add_constraint(h >> (p) & (k | q | r | b))
+    E.add_constraint(h >> ((x.i-2,x.j-1) & (x.i-2,x.j+1) & (x.i-1,x.j-2) & (x.i-1,x.j+2) & (x.i+1,x.j-2) & (x.i+1,x.j+2) & (x.i+2,x.j-1) & (x.i+2,x.j+1)))
+    E.add_constraint(h >> (p) & ~(k | q | r | b))
 
     # Knight Constraint 2:
     E.add_constraint(~(p.i-2, p.j-1 | p.i-2, p.j+1 | p.i-1, p.j-2 | p.i-1, p.j+2 | p.i+1, p.j-2 | p.i+1, p.j+2 | p.i+2, p.j-1 | p.i+2, p.j+1) >> h)
@@ -167,18 +161,18 @@ def example_theory():
 
     # Rook Constraint 1:
     E.add_constraint(r >> ("∀.f" (x.i,f)) & ("∀.r" (x.r,j)))
-    E.add_constraint(r >> (p) & (k | q | h | b))
+    E.add_constraint(r >> (p) & ~(k | q | h | b))
 
     # Rook Constraint 2:
-    E.add_constraint(("∀.f" (~p.i, p.f)) & ("∀.r" (~p.r,j)) >> r)
+    E.add_constraint(("∀.f" (~p.i, p.f)) & ("∀.r" (~p.r,p.j)) >> r)
 
 
     # Bishop Constraint 1:
-    E.add_constraint(b >> ("∀.m" (x.i+m,j+m) & (x.i+m,j-m) & (x.i-m,j+m) & (x.i-m,j-m)))
-    E.add_constraint(b >> (p) & (k | q | r | h))
+    E.add_constraint(b >> ("∀.m" (x.i+m,x.j+m) & (x.i+m,x.j-m) & (x.i-m,x.j+m) & (x.i-m,x.j-m)))
+    E.add_constraint(b >> (p) & ~(k | q | r | h))
 
     # Bishop Constraint 2:
-    E.add_constraint(("∀.m" (~(p.i+m, j+m) | ~(p.i+m,j-m) | ~(p.i-m,j+m) | ~(p.i-m,j-m)) >> b))
+    E.add_constraint(("∀.m" (~(p.i+m, p.j+m) | ~(p.i+m, p.j-m) | ~(p.i-m, p.j+m) | ~(p.i-m, p.j-m)) >> b))
 
     #=================================================
 

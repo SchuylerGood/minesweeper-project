@@ -136,11 +136,11 @@ def example_theory():
     #==========  Current Constraints  ================
 
     # Queen Constraint 1:
-    E.add_constraint(q >> ("∀.f" (x.i ,x.f)) & ("∀.r" (x.r,x.j)) & ("∀.m" (x.i+m,x.j+m) & (x.i+m,x.j-m) & (x.i-m,x.j+m) & (x.i-m,x.j-m)))
+    E.add_constraint(q >> ((x.i ,x.f)) & ((x.r,x.j)) & ((x.i+m,x.j+m) & (x.i+m,x.j-m) & (x.i-m,x.j+m) & (x.i-m,x.j-m)))
     E.add_constraint(q >> (p) & ~(k | h | r | b))
 
     # Queen Constraint 2:
-    E.add_constraint(("∀.f" (~p.i,x.f)) & ("∀.r" (~p.r,~p.j)) & ("∀.m" (~(p.i+m, p.j+m) | ~(p.i+m, p.j-m) | ~(p.i-m, p.j+m) | ~(p.i-m, p.j-m))) >> q)
+    E.add_constraint(((~p.i,x.f)) & ((~p.r,~p.j)) & ((~(p.i+m, p.j+m) | ~(p.i+m, p.j-m) | ~(p.i-m, p.j+m) | ~(p.i-m, p.j-m))) >> q)
 
 
     # King Constraint 1:
@@ -160,19 +160,19 @@ def example_theory():
 
 
     # Rook Constraint 1:
-    E.add_constraint(r >> ("∀.f" (x.i,f)) & ("∀.r" (x.r,j)))
+    E.add_constraint(r >> ((x.i,f)) & ((x.r,j)))
     E.add_constraint(r >> (p) & ~(k | q | h | b))
 
     # Rook Constraint 2:
-    E.add_constraint(("∀.f" (~p.i, p.f)) & ("∀.r" (~p.r,p.j)) >> r)
+    E.add_constraint(((~p.i, p.f)) & ((~p.r,p.j)) >> r)
 
 
     # Bishop Constraint 1:
-    E.add_constraint(b >> ("∀.m" (x.i+m,x.j+m) & (x.i+m,x.j-m) & (x.i-m,x.j+m) & (x.i-m,x.j-m)))
+    E.add_constraint(b >> ((x.i+m,x.j+m) & (x.i+m,x.j-m) & (x.i-m,x.j+m) & (x.i-m,x.j-m)))
     E.add_constraint(b >> (p) & ~(k | q | r | h))
 
     # Bishop Constraint 2:
-    E.add_constraint(("∀.m" (~(p.i+m, p.j+m) | ~(p.i+m, p.j-m) | ~(p.i-m, p.j+m) | ~(p.i-m, p.j-m)) >> b))
+    E.add_constraint(((~(p.i+m, p.j+m) | ~(p.i+m, p.j-m) | ~(p.i-m, p.j+m) | ~(p.i-m, p.j-m)) >> b))
 
     #=================================================
 

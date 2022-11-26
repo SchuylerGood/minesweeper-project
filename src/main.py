@@ -36,9 +36,16 @@ def remove_piece(b, piece):
 def solution(b, pieces, n):
     if (n == b.get_size):
         return
-    if (is_safe):
-        solution(b, pieces, n+1)
-    pass
+    for i in range(b.get_size()):
+        piece = pieces[n]
+        piece.i = n
+        piece.j = i
+        if(is_safe(b, piece)):
+            # insert_place(b, piece)
+            solution(b, pieces, n+1)
+            remove_piece(b, piece)
+        else:
+            remove_piece(b, piece)
 
 
 def main():

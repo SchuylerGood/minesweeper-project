@@ -11,6 +11,9 @@ class piece:
     def attack(self, attackList):
         pass
 
+    def de_attack(self, attackList):
+        pass
+
 
 class bishop(piece):
     def __init__(self, i, j):
@@ -58,6 +61,44 @@ class bishop(piece):
             k -= 1
             l -= 1
 
+    def de_attack(self, attackList):
+        """
+        Calculates the attack positions given the current position of the bishop\n
+        Parameters:\n
+            i: int - the current row position of the rook\n
+            i: int - the current column position of the rook\n
+            n: int - size of the board\n
+        Returns:\n
+            attack_spaces: array - Returns an array of all the positions (i,j) that the rook can attack\n
+        Raises:\n
+            ValueError: if n is less than 0 
+        """
+        # Diagonal attacking spaces
+        k = self.i + 1
+        l = self.j + 1
+        while (k <= 3 and l <= 3):
+            attackList.remove([k, l])
+            k += 1
+            l += 1
+        k = self.i+1
+        l = self.j-1
+        while (k <= 3 and l >= 0):
+            attackList.remove([k, l])
+            k += 1
+            l -= 1
+        k = self.i - 1
+        l = self.j + 1
+        while (k >= 0 and l <= 3):
+            attackList.remove([k, l])
+            k -= 1
+            l += 1
+        k = self.i - 1
+        l = self.j - 1
+        while (k >= 0 and l >= 0):
+            attackList.remove([k, l])
+            k -= 1
+            l -= 1
+
 
 class rook(piece):
     def __init__(self, i, j, horizontal_conditions, vertical_conditions):
@@ -85,6 +126,23 @@ class rook(piece):
         for n in range(0, 4):
             attackList.append([n, self.j])
             attackList.append([self.i, n])
+
+    def de_attack(self, attackList):
+        """
+        Calculates the attack positions given the current position of the rook\n
+        Parameters:\n
+            i: int - the current row position of the rook\n
+            i: int - the current column position of the rook\n
+            n: int - size of the board\n
+        Returns:\n
+            attack_spaces: array - Returns an array of all the positions (i,j) that the rook can attack\n
+        Raises:\n
+            ValueError: if n is less than 0
+        """
+        # Vertical and Horizontal attacking spaces
+        for n in range(0, 4):
+            attackList.remove([n, self.j])
+            attackList.remove([self.i, n])
 
 
 class queen(rook):
@@ -129,6 +187,38 @@ class queen(rook):
             k -= 1
             l -= 1
 
+    def de_attack(self, attackList):
+        # Vertical and Horizontal attacking spaces
+        for n in range(0, 4):
+            attackList.remove([n, self.j])
+            attackList.remove([self.i, n])
+
+        # Diagonal attacking spaces
+        k = self.i + 1
+        l = self.j + 1
+        while (k <= 3 and l <= 3):
+            attackList.remove([k, l])
+            k += 1
+            l += 1
+        k = self.i+1
+        l = self.j-1
+        while (k <= 3 and l >= 0):
+            attackList.remove([k, l])
+            k += 1
+            l -= 1
+        k = self.i - 1
+        l = self.j + 1
+        while (k >= 0 and l <= 3):
+            attackList.remove([k, l])
+            k -= 1
+            l += 1
+        k = self.i - 1
+        l = self.j - 1
+        while (k >= 0 and l >= 0):
+            attackList.remove([k, l])
+            k -= 1
+            l -= 1
+
 
 class knight(piece):
     def __init__(self, knight_conditions, i, j):
@@ -158,6 +248,26 @@ class knight(piece):
         attackList.append([self.i+1, self.j+2])
         attackList.append([self.i+2, self.j-1])
         attackList.append([self.i+2, self.j+1])
+
+    def de_attack(self, attackList):
+        """
+        Calculates the attack positions given the current position of the knight\n
+        Parameters:\n
+            i: int - the current row position of the rook\n
+            i: int - the current column position of the rook\n
+        Returns:\n
+            attack_spaces: array - Returns an array of all the positions (i,j) that the rook can attack\n
+        Raises:\n
+            ValueError: if n is less than 0
+        """
+        attackList.remove([self.i-2, self.j-1])
+        attackList.remove([self.i-2, self.j+1])
+        attackList.remove([self.i-1, self.j-2])
+        attackList.remove([self.i-1, self.j+2])
+        attackList.remove([self.i+1, self.j-2])
+        attackList.remove([self.i+1, self.j+2])
+        attackList.remove([self.i+2, self.j-1])
+        attackList.remove([self.i+2, self.j+1])
 
 
 class king(piece):

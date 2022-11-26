@@ -1,19 +1,36 @@
 import pieces
 import board as b
 
+# I want this function to be just pass by value it should not modify the original attackList
+
 
 def is_safe(b, piece):
     pos = [piece.i, piece.j]
     piece.attack(b.get_attacked)
     positions = b.get_positions
+    positions.append(pos)
     if set(positions).intersection(b.get_attacked) > 0:
         return False
     else:
         return True
 
 
+# I want this function to be pass by referance
+
+def insert_place(b, piece):
+    pos = [piece.i, piece.j]
+    piece.attack(b.get_attacked)
+    positions = b.get_positions
+    positions.append(pos)
+
+# I want this function to be pass by referance
+
+
 def remove_piece(b, piece):
-    pass
+    pos = [piece.i, piece.j]
+    piece.de_attack(b.get_attacked)
+    positions = b.get_positions
+    positions.remove(pos)
 
 
 def solution(b, pieces, n):
@@ -21,7 +38,6 @@ def solution(b, pieces, n):
         return
     if (is_safe):
         solution(b, pieces, n+1)
-
     pass
 
 

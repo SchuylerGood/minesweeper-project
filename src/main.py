@@ -5,37 +5,38 @@ import board as b
 
 
 def is_safe(b, piece):
-    pos = [piece.i, piece.j]
-    piece.attack(b.get_attacked)
-    positions = b.get_positions
+    pos = (piece.i, piece.j)
+    piece.attack(b.get_attacked())
+    positions = b.get_positions()
     positions.append(pos)
-    if set(positions).intersection(b.get_attacked) > 0:
+    intersections = set(positions).intersection(set(b.get_attacked()))
+    if len(intersections) > 1:
         return False
     else:
         return True
 # I want this function to be pass by referance
 
 def insert_place(b, piece):
-    pos = [piece.i, piece.j]
-    piece.attack(b.get_attacked)
-    positions = b.get_positions
+    pos = (piece.i, piece.j)
+    piece.attack(b.get_attacked())
+    positions = b.get_positions()
     positions.append(pos)
 
 # I want this function to be pass by referance
 
 
 def remove_piece(b, piece):
-    pos = [piece.i, piece.j]
-    piece.de_attack(b.get_attacked)
-    positions = b.get_positions
+    pos = (piece.i, piece.j)
+    piece.de_attack(b.get_attacked())
+    positions = b.get_positions()
     positions.remove(pos)
 
 
 # Explaination for this function as it is the most important function in the whole implementation
-def solution(b, pieces, n, solution):
-    if (n == b.get_size):  # this is base case at this position we will have the solution
+def solution(b, pieces, n, solution_list):
+    if (n == 4):  # this is base case at this position we will have the solution
         # appending the solution as we have multiple solution and we find them all
-        solution.append(b.get_position())
+        solution_list.append(b.get_position())
         return
     for i in range(b.get_size()):
         # get the piece at the nth location to be places in the nth row
@@ -45,7 +46,7 @@ def solution(b, pieces, n, solution):
         if(is_safe(b, piece)):  # this function will check if placement of the piece is safe of not and will also place the piece
             # insert_place(b, piece)
             # then we call the recursion function for next row,
-            solution(b, pieces, n+1)
+            solution(b, pieces, n+1, solution_list)
             # while returning it will remove the piece from the board
             remove_piece(b, piece)
         else:
@@ -58,11 +59,13 @@ def main():
     pieces_list = pieces.generate_n_pieces(n)
     board = b.board(n, [], [])
 
-    for i in range(n):
-        print(str(pieces_list[i]))
+    solution_list  = []
+    solution(board, pieces_list, 0, solution_list)
+    # for i in range(n):
+    #     print(str(pieces_list[i]))
 
     # for i in range(n):
     #     board.set((0, i), pieces_list[i])
-
+    print(solution_list)
 
 main()

@@ -39,25 +39,25 @@ class bishop(piece):
         k = self.i + 1
         l = self.j + 1
         while (k <= 3 and l <= 3):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k += 1
             l += 1
         k = self.i+1
         l = self.j-1
         while (k <= 3 and l >= 0):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k += 1
             l -= 1
         k = self.i - 1
         l = self.j + 1
         while (k >= 0 and l <= 3):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k -= 1
             l += 1
         k = self.i - 1
         l = self.j - 1
         while (k >= 0 and l >= 0):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k -= 1
             l -= 1
 
@@ -77,25 +77,25 @@ class bishop(piece):
         k = self.i + 1
         l = self.j + 1
         while (k <= 3 and l <= 3):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k += 1
             l += 1
         k = self.i+1
         l = self.j-1
         while (k <= 3 and l >= 0):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k += 1
             l -= 1
         k = self.i - 1
         l = self.j + 1
         while (k >= 0 and l <= 3):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k -= 1
             l += 1
         k = self.i - 1
         l = self.j - 1
         while (k >= 0 and l >= 0):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k -= 1
             l -= 1
 
@@ -124,8 +124,8 @@ class rook(piece):
         """
         # Vertical and Horizontal attacking spaces
         for n in range(0, 4):
-            attackList.append([n, self.j])
-            attackList.append([self.i, n])
+            attackList.append((n, self.j))
+            attackList.append((self.i, n))
 
     def de_attack(self, attackList):
         """
@@ -141,8 +141,8 @@ class rook(piece):
         """
         # Vertical and Horizontal attacking spaces
         for n in range(0, 4):
-            attackList.remove([n, self.j])
-            attackList.remove([self.i, n])
+            attackList.remove((n, self.j))
+            attackList.remove((self.i, n))
 
 
 class queen(rook):
@@ -158,64 +158,64 @@ class queen(rook):
     def attack(self, attackList):
         # Vertical and Horizontal attacking spaces
         for n in range(0, 4):
-            attackList.append([n, self.j])
-            attackList.append([self.i, n])
+            attackList.append((n, self.j))
+            attackList.append((self.i, n))
 
         # Diagonal attacking spaces
         k = self.i + 1
         l = self.j + 1
         while (k <= 3 and l <= 3):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k += 1
             l += 1
         k = self.i+1
         l = self.j-1
         while (k <= 3 and l >= 0):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k += 1
             l -= 1
         k = self.i - 1
         l = self.j + 1
         while (k >= 0 and l <= 3):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k -= 1
             l += 1
         k = self.i - 1
         l = self.j - 1
         while (k >= 0 and l >= 0):
-            attackList.append([k, l])
+            attackList.append((k, l))
             k -= 1
             l -= 1
 
     def de_attack(self, attackList):
         # Vertical and Horizontal attacking spaces
         for n in range(0, 4):
-            attackList.remove([n, self.j])
-            attackList.remove([self.i, n])
+            attackList.remove((n, self.j))
+            attackList.remove((self.i, n))
 
         # Diagonal attacking spaces
         k = self.i + 1
         l = self.j + 1
         while (k <= 3 and l <= 3):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k += 1
             l += 1
         k = self.i+1
         l = self.j-1
         while (k <= 3 and l >= 0):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k += 1
             l -= 1
         k = self.i - 1
         l = self.j + 1
         while (k >= 0 and l <= 3):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k -= 1
             l += 1
         k = self.i - 1
         l = self.j - 1
         while (k >= 0 and l >= 0):
-            attackList.remove([k, l])
+            attackList.remove((k, l))
             k -= 1
             l -= 1
 
@@ -240,14 +240,14 @@ class knight(piece):
         Raises:\n
             ValueError: if n is less than 0
         """
-        attackList.append([self.i-2, self.j-1])
-        attackList.append([self.i-2, self.j+1])
-        attackList.append([self.i-1, self.j-2])
-        attackList.append([self.i-1, self.j+2])
-        attackList.append([self.i+1, self.j-2])
-        attackList.append([self.i+1, self.j+2])
-        attackList.append([self.i+2, self.j-1])
-        attackList.append([self.i+2, self.j+1])
+        attackList.append((self.i-2, self.j-1))
+        attackList.append((self.i-2, self.j+1))
+        attackList.append((self.i-1, self.j-2))
+        attackList.append((self.i-1, self.j+2))
+        attackList.append((self.i+1, self.j-2))
+        attackList.append((self.i+1, self.j+2))
+        attackList.append((self.i+2, self.j-1))
+        attackList.append((self.i+2, self.j+1))
 
     def de_attack(self, attackList):
         """
@@ -260,14 +260,14 @@ class knight(piece):
         Raises:\n
             ValueError: if n is less than 0
         """
-        attackList.remove([self.i-2, self.j-1])
-        attackList.remove([self.i-2, self.j+1])
-        attackList.remove([self.i-1, self.j-2])
-        attackList.remove([self.i-1, self.j+2])
-        attackList.remove([self.i+1, self.j-2])
-        attackList.remove([self.i+1, self.j+2])
-        attackList.remove([self.i+2, self.j-1])
-        attackList.remove([self.i+2, self.j+1])
+        attackList.remove((self.i-2, self.j-1))
+        attackList.remove((self.i-2, self.j+1))
+        attackList.remove((self.i-1, self.j-2))
+        attackList.remove((self.i-1, self.j+2))
+        attackList.remove((self.i+1, self.j-2))
+        attackList.remove((self.i+1, self.j+2))
+        attackList.remove((self.i+2, self.j-1))
+        attackList.remove((self.i+2, self.j+1))
 
 
 class king(piece):
@@ -290,16 +290,16 @@ class king(piece):
         Raises:\n
             ValueError: if n is less than 0
         """
-        attackList.append([self.i + 1, self.j])
-        attackList.append([self.i - 1, self.j])
-        attackList.append([self.i, self.j+1])
-        attackList.append([self.i, self.j-1])
-        attackList.append([self.i + 1, self.j+1])
-        attackList.append([self.i + 1, self.j-1])
-        attackList.append([self.i - 1, self.j+1])
-        attackList.append([self.i - 1, self.j-1])
+        attackList.append((self.i + 1, self.j))
+        attackList.append((self.i - 1, self.j))
+        attackList.append((self.i, self.j+1))
+        attackList.append((self.i, self.j-1))
+        attackList.append((self.i + 1, self.j+1))
+        attackList.append((self.i + 1, self.j-1))
+        attackList.append((self.i - 1, self.j+1))
+        attackList.append((self.i - 1, self.j-1))
 
-    def attack(self, attackList):
+    def de_attack(self, attackList):
         """
         Calculates the attack positions given the current position of the king\n
         Parameters:\n
@@ -310,14 +310,14 @@ class king(piece):
         Raises:\n
             ValueError: if n is less than 0
         """
-        attackList.remove([self.i + 1, self.j])
-        attackList.remove([self.i - 1, self.j])
-        attackList.remove([self.i, self.j+1])
-        attackList.remove([self.i, self.j-1])
-        attackList.remove([self.i + 1, self.j+1])
-        attackList.remove([self.i + 1, self.j-1])
-        attackList.remove([self.i - 1, self.j+1])
-        attackList.remove([self.i - 1, self.j-1])
+        attackList.remove((self.i + 1, self.j))
+        attackList.remove((self.i - 1, self.j))
+        attackList.remove((self.i, self.j+1))
+        attackList.remove((self.i, self.j-1))
+        attackList.remove((self.i + 1, self.j+1))
+        attackList.remove((self.i + 1, self.j-1))
+        attackList.remove((self.i - 1, self.j+1))
+        attackList.remove((self.i - 1, self.j-1))
 
 
 def generate_n_pieces(n):
@@ -331,6 +331,7 @@ def generate_n_pieces(n):
     }
     for i in range(n):
         random_num = randint(0, 4)
-        list_of_pieces.append(dictionary_of_pieces[random_num])
+        # list_of_pieces.append(dictionary_of_pieces[random_num])
+        list_of_pieces.append(dictionary_of_pieces[2])
 
     return list_of_pieces

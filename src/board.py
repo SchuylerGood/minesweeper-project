@@ -5,6 +5,8 @@ class board():
         Initializes the board, also creates the rows and columns automatically.\n
         Parameters:\n
             size: int - the width and height of the board (note, the board is always of form n x n)\n
+            attacked: 2D Array - The attacked positions on the board.\n
+            positions: 2D Array - The positions of the pieces on the board.\n
         Returns:\n
             None\n
         Raises:\n
@@ -54,7 +56,7 @@ class board():
                 print(e, end="  ")
             print("")
 
-    def create_board(self, n=8):
+    def create_board(self, n):
         """
         Creates a board of size n. This function is automatically called on initialization.\n
         Parameters:\n

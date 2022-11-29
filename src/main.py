@@ -54,5 +54,15 @@ def solution(b, pieces, n, solution):
 
 
 def main():
-    pass
+    n = 4
+    pieces_list = pieces.generate_n_pieces(n)
+    board = b.board(n, [], [])
+
+    for i in range(n):
+        print(str(pieces_list[i]))
+
+    # for i in range(n):
+    #     board.set((0, i), pieces_list[i])
+
+
 main()

@@ -117,6 +117,65 @@ r = rook_position_proposition(i,j) # Is true if there is a Rook in position (i, 
 h = knight_position_proposition(i,j) # Is true if there is a Knight in position (i, j).
 q = queen_position_proposition(i,j) # Is true if there is a Queen in position (i, j).
 
+# Create the constraints for the problem here
+#===============================================
+# Constraint 1: There is exactly one King on the board.
+@constraint.exactly_one(E)
+def king_constraint():
+    for i in range(n):
+        for j in range(n):
+            yield k(i,j)
+
+# Constraint 2: There is exactly one Queen on the board.
+@constraint.exactly_one(E)
+def queen_constraint():
+    for i in range(n):
+        for j in range(n):
+            yield q(i,j)
+
+# Constraint 3: There are exactly two Bishops on the board.
+@constraint.exactly_k(E, 2)
+def bishop_constraint():
+    for i in range(n):
+        for j in range(n):
+            yield b(i,j)
+
+# Constraint 4: There are exactly two Rooks on the board.
+@constraint.exactly_k(E, 2)
+def rook_constraint():
+    for i in range(n):
+        for j in range(n):
+            yield r(i,j)
+
+# Constraint 5: There are exactly two Knights on the board.
+@constraint.exactly_k(E, 2)
+def knight_constraint():
+    for i in range(n):
+        for j in range(n):
+            yield h(i,j)
+
+# Constraint 6: There are no more than 8 pieces on the board.
+@constraint.at_most_k(E, 8)
+def piece_constraint():
+    for i in range(n):
+        for j in range(n):
+            yield p(i,j)
+
+# Constraint 7: There are no more than 8 pieces on the board.
+@constraint.at_most_k(E, 8)
+def attack_constraint():
+    for i in range(n):
+        for j in range(n):
+            yield x(i,j)
+
+# Constraint 8: There is exactly one piece in each position.
+@constraint.exactly_one(E)
+def piece_position_constraint():
+
+    for i in range(n):
+        for j in range(n):
+            yield p(i,j)
+
 
 
 

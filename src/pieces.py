@@ -101,7 +101,7 @@ class bishop(piece):
 
 
 class rook(piece):
-    def __init__(self, i, j, horizontal_conditions, vertical_conditions):
+    def __init__(self, horizontal_conditions, vertical_conditions, i, j):
         self.horizontal_conditions = horizontal_conditions
         self.vertical_conditions = vertical_conditions
         self.i = i
@@ -147,7 +147,7 @@ class rook(piece):
 
 class queen(rook):
     def __init__(self, horizontal_conditions, vertical_conditions, diagonal_conditions, i, j):
-        super().__init__(horizontal_conditions, vertical_conditions)
+        super().__init__(horizontal_conditions, vertical_conditions, i, j)
         self.diagonal_conditions = diagonal_conditions
         self.i = i
         self.j = j
@@ -271,8 +271,10 @@ class knight(piece):
 
 
 class king(piece):
-    def __init__(self, king_conditions):
+    def __init__(self, king_conditions, i, j):
         self.king_conditions = king_conditions
+        self.i = i
+        self.j = j
 
     def __str__(self):
         return "K"
@@ -321,11 +323,11 @@ class king(piece):
 def generate_n_pieces(n):
     list_of_pieces = []
     dictionary_of_pieces = {
-        0: queen(True, True, True),
-        1: bishop(True),
-        2: rook(True, True),
-        3: knight(True),
-        4: king(True)
+        0: queen(True, True, True, 0, 0),
+        1: bishop(0, 0),
+        2: rook(True, True, 0, 0),
+        3: knight(True, 0, 0),
+        4: king(True, 0, 0)
     }
     for i in range(n):
         random_num = randint(0, 4)

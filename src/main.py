@@ -2,29 +2,33 @@ import pieces
 import board as b
 
 # I want this function to be just pass by value it should not modify the original attackList
-
-
 def is_safe(b, piece):
     pos = (piece.i, piece.j)
     piece.attack(b.get_attacked())
     positions = b.get_positions()
     positions.append(pos)
-    intersections = set(positions).intersection(set(b.get_attacked()))
-    if len(intersections) > 1:
-        return False
-    else:
-        return True
-# I want this function to be pass by referance
 
+    currentPositions = set(positions)
+    currentAttacked = set(b.get_attacked())
+    intersections = currentPositions.intersection(currentAttacked)
+
+    # if len(intersections) > 1:
+    #     return False
+    # else:
+    #     return True
+
+    return len(intersections) < 2
+
+
+# I want this function to be pass by referance
 def insert_place(b, piece):
     pos = (piece.i, piece.j)
     piece.attack(b.get_attacked())
     positions = b.get_positions()
     positions.append(pos)
 
+
 # I want this function to be pass by referance
-
-
 def remove_piece(b, piece):
     pos = (piece.i, piece.j)
     piece.de_attack(b.get_attacked())
@@ -38,7 +42,7 @@ def solution(b, pieces, n, solution_list):
         # appending the solution as we have multiple solution and we find them all
         solution_list.append(b.get_position())
         return
-    for i in range(b.get_size()):
+    for i in range(4):
         # get the piece at the nth location to be places in the nth row
         piece = pieces[n]
         piece.i = n  # assigning the row number to i
@@ -58,7 +62,6 @@ def main():
     n = 4
     pieces_list = pieces.generate_n_pieces(n)
     board = b.board(n, [], [])
-
     solution_list  = []
     solution(board, pieces_list, 0, solution_list)
     # for i in range(n):

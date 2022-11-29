@@ -19,7 +19,6 @@ class board():
         self.positions = positions
         self.size = size
         self.b = []
-        self.size = 8
         self.b = self.create_board(self.size)
 
     def __str__(self):
@@ -134,16 +133,16 @@ class board():
         return self.positions
 
 
-if __name__ == "__main__":
-    b = board(8, [], [])
-    print("\n\n\n")
+# if __name__ == "__main__":
+#     b = board(8, [], [])
+#     print("\n\n\n")
 
-    s = ""
-    print(type(s))
+#     s = ""
+#     print(type(s))
 
-    b.set((3, 4), "H")
-    b.print()
+#     b.set((3, 4), "H")
+#     b.print()
 
-    print(b.get((3, 4)))
+#     print(b.get((3, 4)))
 
-    print(b)
+#     print(b)

@@ -123,9 +123,9 @@ class rook(piece):
             ValueError: if n is less than 0
         """
         # Vertical and Horizontal attacking spaces
-        for n in range(0, 4):
-            attackList.append((n, self.j))
-            attackList.append((self.i, n))
+        for z in range(0, 4):
+            attackList.append((z, self.j))
+            attackList.append((self.i, z))
 
     def de_attack(self, attackList):
         """
@@ -140,9 +140,9 @@ class rook(piece):
             ValueError: if n is less than 0
         """
         # Vertical and Horizontal attacking spaces
-        for n in range(0, 4):
-            attackList.remove((n, self.j))
-            attackList.remove((self.i, n))
+        for z in range(0, 4):
+            attackList.remove((z, self.j))
+            attackList.remove((self.i, z))
 
 
 class queen(rook):
@@ -157,9 +157,9 @@ class queen(rook):
 
     def attack(self, attackList):
         # Vertical and Horizontal attacking spaces
-        for n in range(0, 4):
-            attackList.append((n, self.j))
-            attackList.append((self.i, n))
+        for y in range(0, 4):
+            attackList.append((y, self.j))
+            attackList.append((self.i, y))
 
         # Diagonal attacking spaces
         k = self.i + 1
@@ -189,9 +189,9 @@ class queen(rook):
 
     def de_attack(self, attackList):
         # Vertical and Horizontal attacking spaces
-        for n in range(0, 4):
-            attackList.remove((n, self.j))
-            attackList.remove((self.i, n))
+        for y in range(0, 4):
+            attackList.remove((y, self.j))
+            attackList.remove((self.i, y))
 
         # Diagonal attacking spaces
         k = self.i + 1
@@ -332,6 +332,6 @@ def generate_n_pieces(n):
     for i in range(n):
         random_num = randint(0, 4)
         # list_of_pieces.append(dictionary_of_pieces[random_num])
-        list_of_pieces.append(dictionary_of_pieces[2])
+        list_of_pieces.append(dictionary_of_pieces[0])
 
     return list_of_pieces

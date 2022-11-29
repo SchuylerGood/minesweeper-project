@@ -13,8 +13,6 @@ def is_safe(b, piece):
         return False
     else:
         return True
-
-
 # I want this function to be pass by referance
 
 def insert_place(b, piece):
@@ -56,14 +54,5 @@ def solution(b, pieces, n, solution):
 
 
 def main():
-    n = 8
-    list_of_pieces = pieces.generate_n_pieces(n)
-    board = b.board(n)
-
-    for i in range(n):
-        board.set((0, i), list_of_pieces[i])
-
-    board.print()
-
-
+    pass
 main()

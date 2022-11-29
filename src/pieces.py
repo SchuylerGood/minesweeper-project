@@ -277,7 +277,7 @@ class king(piece):
     def __str__(self):
         return "K"
 
-    def attack(self, i, j):
+    def attack(self, attackList):
         """
         Calculates the attack positions given the current position of the king\n
         Parameters:\n
@@ -288,16 +288,34 @@ class king(piece):
         Raises:\n
             ValueError: if n is less than 0
         """
-        return [
-            (self.i-1, self.j-1),
-            (self.i-1, self.j),
-            (self.i-1, self.j+1),
-            (self.i,   self.j-1),
-            (self.i, self.j+1),
-            (self.i+1, self.j-1),
-            (self.i+1, self.j),
-            (self.i+1, self.j+1)
-        ]
+        attackList.append([self.i + 1, self.j])
+        attackList.append([self.i - 1, self.j])
+        attackList.append([self.i, self.j+1])
+        attackList.append([self.i, self.j-1])
+        attackList.append([self.i + 1, self.j+1])
+        attackList.append([self.i + 1, self.j-1])
+        attackList.append([self.i - 1, self.j+1])
+        attackList.append([self.i - 1, self.j-1])
+
+    def attack(self, attackList):
+        """
+        Calculates the attack positions given the current position of the king\n
+        Parameters:\n
+            i: int - the current row position of the rook\n
+            i: int - the current column position of the rook\n
+        Returns:\n
+            attack_spaces: array - Returns an array of all the positions (i,j) that the rook can attack\n
+        Raises:\n
+            ValueError: if n is less than 0
+        """
+        attackList.remove([self.i + 1, self.j])
+        attackList.remove([self.i - 1, self.j])
+        attackList.remove([self.i, self.j+1])
+        attackList.remove([self.i, self.j-1])
+        attackList.remove([self.i + 1, self.j+1])
+        attackList.remove([self.i + 1, self.j-1])
+        attackList.remove([self.i - 1, self.j+1])
+        attackList.remove([self.i - 1, self.j-1])
 
 
 def generate_n_pieces(n):

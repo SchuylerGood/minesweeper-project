@@ -122,28 +122,27 @@ def printBoard(board):
         for j in range(N):
             print(board[i][j], end="  ")
         print(" ")
-
-
 # =================================
 # =====        THEORY        ======
 # =================================
+
+
 def theory1():
     for i in range(N):
         for j in range(N):
-            
-            E.add_constraint(Empty("_", (i, j)) | Attack("A", (i, j)) | King("K", (i, j)) | Bishop("B", (i, j)) | Rooke("R", (i, j)) | Knight("N", (i, j)) | Queen("Q", (i, j)))
-
-            # King Constraints
-            E.add_constraint(King("K", (i, j)) >> 
-                (
-                        Attack("A", (i, j+1))
-                    | Attack("A", (i, j-1))
-                    | Attack("A", (i+1, j))
-                    | Attack("A", (i-1, j))
-                    | Attack("A", (i+1, j+1))
-                    | Attack("A", (i+1, j-1))
-                    | Attack("A", (i-1, j+1))
-                    | Attack("A", (i-1, j-1))
+            E.add_constraint(Empty("_", (i, j)) | Attack("A", (i, j)) | King("K", (i, j)) | Bishop(
+                "B", (i, j)) | Rooke("R", (i, j)) | Knight("N", (i, j)) | Queen("Q", (i, j)))
+           # King Constraints
+            E.add_constraint(King("K", (i, j)) >>
+                             (
+                Attack("A", (i, j+1))
+                | Attack("A", (i, j-1))
+                | Attack("A", (i+1, j))
+                | Attack("A", (i-1, j))
+                | Attack("A", (i+1, j+1))
+                | Attack("A", (i+1, j-1))
+                | Attack("A", (i-1, j+1))
+                | Attack("A", (i-1, j-1))
             ))
 
             # Knight Constraints
@@ -159,16 +158,17 @@ def theory1():
                 | Attack("A", (i-1, j-2))
             )
             )
-
             # Rooke Constraints
             for x in range(N):
                 for y in range(N):
                     l = x
                     k = y
-                    for i in range(N):
+                    for i in range(1, N):
                         E.add_constraint(Rooke("R", (k, l))) >> (
                             Attack("A", (k, i))
                             | Attack("A", (i, l))
+                            | Attack("A", (k, -i))
+                            | Attack("A", (-i, l))
                         )
 
             # Bishop Constaints
@@ -184,7 +184,6 @@ def theory1():
                         )
                         k += 1
                         l += 1
-
                     # digonal towards down and left
                     if k != N-1 and l != 0:
                         k += 1
@@ -221,28 +220,48 @@ def theory1():
             # Queen Constraints
             for x in range(N):
                 for y in range(N):
-                    if x == y and (x != i and y != j):
-                        E.add_constraint(Queen("Q", (i, j)) >>
-                                         (
-                            Attack("A", (i, j))
+                    # digonal towards down and right
+                    if k != N-1 and l != N-1:
+                        k = x+1
+                        l = y+1
+                    while(k <= (N-1) and l <= 3):
+                        E.add_constraint(Queen("Q", (k, l))) >> (
+                            Attack("A", (k, l))
                         )
+                        k += 1
+                        l += 1
+                    # digonal towards down and left
+                    if k != N-1 and l != 0:
+                        k += 1
+                        l -= 1
+                    while (k <= 3 and l >= 0):
+                        E.add_constraint(Queen("Q", (k, l))) >> (
+                            Attack("A", (k, l))
                         )
-            for x in range(N):
-                for y in range(N):
-                    if x == i and y != j:
-                        E.add_constraint(Queen("Q", (i, j)) >>
-                                         (
-                            Attack("A", (i, y))
+                        k += 1
+                        l -= 1
+
+                    # digonal towards up and right
+                    if k != 0 and l != N-1:
+                        k += 1
+                        l -= 1
+                    while (k >= 0 and l <= 3):
+                        E.add_constraint(Queen("Q", (k, l))) >> (
+                            Attack("A", (k, l))
                         )
+                        k -= 1
+                        l += 1
+
+                    # digonal towards up and left
+                    if k != 0 and l != 0:
+                        k -= 1
+                        l -= 1
+                    while (k >= 0 and l >= 0):
+                        E.add_constraint(Queen("Q", (k, l))) >> (
+                            Attack("A", (k, l))
                         )
-            for x in range(N):
-                for y in range(N):
-                    if y == j and x != i:
-                        E.add_constraint(Queen("Q", (i, j)) >>
-                                         (
-                            Attack("A", (x, j))
-                        )
-            )
+                        k -= 1
+                        l -= 1
 
     constraint.implies_all(E)
     return E

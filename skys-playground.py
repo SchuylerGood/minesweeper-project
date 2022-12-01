@@ -1,4 +1,4 @@
-from bauhaus import Encoding, proposition, constraint
+from bauhaus import Encoding, proposition, constraint, print_theory
 from bauhaus.utils import count_solutions, likelihood
 
 E = Encoding()
@@ -130,27 +130,20 @@ def printBoard(board):
 def theory1():
     for i in range(N):
         for j in range(N):
-
-            E.add_constraint(Empty("_", (i, j)) | Attack("A", (i, j)) | King("K", (i, j)) | Bishop(
-                "B", (i, j)) | Rooke("R", (i, j)) | Knight("N", (i, j)) | Queen("Q", (i, j)))
-            # E.add_constraint(Empty("_", (i, j)) >> ~Attack("A", (i, j)))
-            # E.add_constraint(Empty("_", (i, j)) >> ~King("K", (i, j)))
-            # E.add_constraint(Empty("_", (i, j)) >> ~Bishop("B", (i, j)))
-            # E.add_constraint(Empty("_", (i, j)) >> ~Rooke("R", (i, j)))
-            # E.add_constraint(Empty("_", (i, j)) >> ~Knight("N", (i, j)))
-            # E.add_constraint(Empty("_", (i, j)) >> ~Queen("Q", (i, j)))
+            
+            E.add_constraint(Empty("_", (i, j)) | Attack("A", (i, j)) | King("K", (i, j)) | Bishop("B", (i, j)) | Rooke("R", (i, j)) | Knight("N", (i, j)) | Queen("Q", (i, j)))
 
             # King Constraints
-            E.add_constraint(King("K", (i, j)) >>
-                             (
-                Attack("A", (i, j+1))
-                | Attack("A", (i, j-1))
-                | Attack("A", (i+1, j))
-                | Attack("A", (i-1, j))
-                | Attack("A", (i+1, j+1))
-                | Attack("A", (i+1, j-1))
-                | Attack("A", (i-1, j+1))
-                | Attack("A", (i-1, j-1))
+            E.add_constraint(King("K", (i, j)) >> 
+                (
+                        Attack("A", (i, j+1))
+                    | Attack("A", (i, j-1))
+                    | Attack("A", (i+1, j))
+                    | Attack("A", (i-1, j))
+                    | Attack("A", (i+1, j+1))
+                    | Attack("A", (i+1, j-1))
+                    | Attack("A", (i-1, j+1))
+                    | Attack("A", (i-1, j-1))
             ))
 
             # Knight Constraints
@@ -249,14 +242,8 @@ def theory1():
                                          (
                             Attack("A", (x, j))
                         )
-                        )
+            )
 
-    # E.add_constraint(Empty("_", (0, 0)) | Attack("A", (0, 0)) | King("K", (0, 0)) | Bishop("B", (0, 0)) | Rooke("R", (0, 0)) | Knight("N", (0, 0)) | Queen("Q", (0, 0)))
-
-    # E.add_constraint(k1 >> q1)
-    # E.add_constraint(y >> z)
-    # Negate a formula
-    # E.add_constraint((x & y).negate())
     constraint.implies_all(E)
     return E
 
@@ -274,9 +261,12 @@ if __name__ == "__main__":
     print("\nSatisfiable: %s" % T.satisfiable())
     # print("# Solutions: %d" % count_solutions(T))
     solution = T.solve()
+    print(len(solution.keys()))
+    print_theory(solution, "truth")
     for i in solution.keys():
-        print(str(i) + "------" + str(solution[i]))
-
+        if solution[i] == True:
+            print(i.coordinates)
+    # print(solution[Attack(0, 1)])
     # print("   Solution: %s" % T.solve())
     # print("\nVariable likelihoods:")
     # for v,vn in zip([a,b,c,x,y,z], 'abcxyz'):

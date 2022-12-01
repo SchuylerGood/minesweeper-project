@@ -1,6 +1,8 @@
 from bauhaus import Encoding, proposition, constraint
 from bauhaus.utils import count_solutions, likelihood
 
+import board
+
 E = Encoding()
 #============== Propositions ==================
 
@@ -100,13 +102,12 @@ class queen_position_proposition:
 #     def __repr__(self):
 #         return f"A.{self.data}"
 
-# Temporary varialbes that will be replaced with actual values later on
-n = "Size of the board"
-f = "file" # file is a chess term for column of the board
-r = "row"
-m = "m scalar for i & j, (diagonals)"
-i = "i-position"
-j = "j-position"
+N = 4 # Size of the board
+f = 0 # file
+r = 0 # row
+m = 0 # m scalar for i & j, (diagonals)
+i = 0 # i-position
+j = 0 # j-position
 
 # Base propositions, to be used in the constraints
 x = attack_position_proposition(i,j,f,r) # Is true if a piece can attack the position (i, j).
@@ -122,58 +123,50 @@ q = queen_position_proposition(i,j) # Is true if there is a Queen in position (i
 # Constraint 1: There is exactly one King on the board.
 @constraint.exactly_one(E)
 def king_constraint():
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             yield k(i,j)
 
 # Constraint 2: There is exactly one Queen on the board.
 @constraint.exactly_one(E)
 def queen_constraint():
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             yield q(i,j)
 
 # Constraint 3: There are exactly two Bishops on the board.
 @constraint.exactly_k(E, 2)
 def bishop_constraint():
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             yield b(i,j)
 
 # Constraint 4: There are exactly two Rooks on the board.
 @constraint.exactly_k(E, 2)
 def rook_constraint():
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             yield r(i,j)
 
 # Constraint 5: There are exactly two Knights on the board.
 @constraint.exactly_k(E, 2)
 def knight_constraint():
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             yield h(i,j)
 
-# Constraint 6: There are no more than 8 pieces on the board.
-@constraint.at_most_k(E, 8)
-def piece_constraint():
-    for i in range(n):
-        for j in range(n):
-            yield p(i,j)
-
-# Constraint 7: There are no more than 8 pieces on the board.
-@constraint.at_most_k(E, 8)
+# Constraint 7: There are no more than N pieces on the board.
+@constraint.at_most_k(E, N)
 def attack_constraint():
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             yield x(i,j)
 
 # Constraint 8: There is exactly one piece in each position.
 @constraint.exactly_one(E)
 def piece_position_constraint():
-
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             yield p(i,j)
 
 
@@ -191,9 +184,11 @@ def piece_position_constraint():
 #  This restriction is fairly minimal, and if there is any concern, reach out to the teaching staff to clarify
 #  what the expectations are.
 def example_theory():
+    
+
+
 
     #==========  Current Constraints  ================
-
     # Queen Constraint 1:
     E.add_constraint(q >> ((x.i ,x.f)) & ((x.r,x.j)) & ((x.i+m,x.j+m) & (x.i+m,x.j-m) & (x.i-m,x.j+m) & (x.i-m,x.j-m)))
     E.add_constraint(q >> (p) & ~(k | h | r | b))
@@ -256,18 +251,21 @@ def example_theory():
 
 if __name__ == "__main__":
 
+    current_board = b.create_board(N)
+    
+
     T = example_theory()
     # Don't compile until you're finished adding all your constraints!
     T = T.compile()
     # After compilation (and only after), you can check some of the properties
     # of your model:
     print("\nSatisfiable: %s" % T.satisfiable())
-    print("# Solutions: %d" % count_solutions(T))
+    # print("# Solutions: %d" % count_solutions(T))
     print("   Solution: %s" % T.solve())
 
     print("\nVariable likelihoods:")
-    for v,vn in zip([a,b,c,x,y,z], 'abcxyz'):
-        # Ensure that you only send these functions NNF formulas
-        # Literals are compiled to NNF here
-        print(" %s: %.2f" % (vn, likelihood(T, v)))
-    print()
+    # for v,vn in zip([a,b,c,x,y,z], 'abcxyz'):
+    #     # Ensure that you only send these functions NNF formulas
+    #     # Literals are compiled to NNF here
+    #     print(" %s: %.2f" % (vn, likelihood(T, v)))
+    # print()

@@ -167,45 +167,16 @@ def theory1():
             )
             )
 
-            # Bishop Constraints
-            # for x in range(N):
-            #     for y in range(N):
-            #         if x == y and (x != i and y != j):
-            #             E.add_constraint(Bishop("B", (i, j)) >>
-            #             (
-            #                 Attack("A", (i, j))
-            #             )
-            # )
-
             # Rooke Constraints
             for x in range(N):
                 for y in range(N):
                     l = x
                     k = y
                     for i in range(N):
-                        E.add_constraint(Rooke("R", (k, l))) >>
-                        (
+                        E.add_constraint(Rooke("R", (k, l))) >> (
                             Attack("A", (k, i))
                             | Attack("A", (i, l))
                         )
-
-            # Rooke Constraints
-            # for x in range(N):
-            #     for y in range(N):
-            #         if x == i and y != j:
-            #             E.add_constraint(Rooke("R", (i, j)) >>
-            #             (
-            #                 Attack("A", (i, y))
-            #             )
-            # )
-            # for x in range(N):
-            #     for y in range(N):
-            #         if y == j and x != i:
-            #             E.add_constraint(Rooke("R", (i, j)) >>
-            #             (
-            #                 Attack("A", (x, j))
-            #             )
-            # )
 
             # Bishop Constaints
             for x in range(N):
@@ -215,8 +186,7 @@ def theory1():
                         k = x+1
                         l = y+1
                     while(k <= (N-1) and l <= 3):
-                        E.add_constraint(Bishop("B", (k, l))) >>
-                        (
+                        E.add_constraint(Bishop("B", (k, l))) >> (
                             Attack("A", (k, l))
                         )
                         k += 1
@@ -227,8 +197,7 @@ def theory1():
                         k += 1
                         l -= 1
                     while (k <= 3 and l >= 0):
-                        E.add_constraint(Bishop("B", (k, l))) >>
-                        (
+                        E.add_constraint(Bishop("B", (k, l))) >> (
                             Attack("A", (k, l))
                         )
                         k += 1
@@ -239,8 +208,7 @@ def theory1():
                         k += 1
                         l -= 1
                     while (k >= 0 and l <= 3):
-                        E.add_constraint(Bishop("B", (k, l))) >>
-                        (
+                        E.add_constraint(Bishop("B", (k, l))) >> (
                             Attack("A", (k, l))
                         )
                         k -= 1
@@ -251,8 +219,7 @@ def theory1():
                         k -= 1
                         l -= 1
                     while (k >= 0 and l >= 0):
-                        E.add_constraint(Bishop("B", (k, l))) >>
-                        (
+                        E.add_constraint(Bishop("B", (k, l))) >> (
                             Attack("A", (k, l))
                         )
                         k -= 1

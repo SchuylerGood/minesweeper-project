@@ -176,12 +176,12 @@ def theory1():
             l = x
             k = y
             for i in range(1, N):
-                E.add_constraint(Rooke("R", (k, l))) >> (
+                E.add_constraint(Rooke("R", (k, l)) >> (
                     Attack("A", (k, i))
                     | Attack("A", (i, l))
                     | Attack("A", (k, -i))
                     | Attack("A", (-i, l))
-                )
+                ))
 
             # Bishop Constaints
     for x in range(N):
@@ -191,9 +191,9 @@ def theory1():
                 k = x+1
                 l = y+1
             while(k <= (N-1) and l <= 3):
-                E.add_constraint(Bishop("B", (k, l))) >> (
+                E.add_constraint(Bishop("B", (k, l)) >> (
                     Attack("A", (k, l))
-                )
+                ))
                 k += 1
                 l += 1
             # digonal towards down and left
@@ -201,8 +201,8 @@ def theory1():
                 k += 1
                 l -= 1
             while (k <= 3 and l >= 0):
-                E.add_constraint(Bishop("B", (k, l))) >> (
-                    Attack("A", (k, l))
+                E.add_constraint(Bishop("B", (k, l)) >> (
+                    Attack("A", (k, l)))
                 )
                 k += 1
                 l -= 1
@@ -212,8 +212,8 @@ def theory1():
                 k += 1
                 l -= 1
             while (k >= 0 and l <= 3):
-                E.add_constraint(Bishop("B", (k, l))) >> (
-                    Attack("A", (k, l))
+                E.add_constraint(Bishop("B", (k, l)) >> (
+                    Attack("A", (k, l)))
                 )
                 k -= 1
                 l += 1
@@ -223,8 +223,8 @@ def theory1():
                 k -= 1
                 l -= 1
             while (k >= 0 and l >= 0):
-                E.add_constraint(Bishop("B", (k, l))) >> (
-                    Attack("A", (k, l))
+                E.add_constraint(Bishop("B", (k, l)) >> (
+                    Attack("A", (k, l)))
                 )
                 k -= 1
                 l -= 1
@@ -237,8 +237,8 @@ def theory1():
                 k = x+1
                 l = y+1
             while(k <= (N-1) and l <= 3):
-                E.add_constraint(Queen("Q", (k, l))) >> (
-                    Attack("A", (k, l))
+                E.add_constraint(Queen("Q", (k, l)) >> (
+                    Attack("A", (k, l)))
                 )
                 k += 1
                 l += 1
@@ -247,8 +247,8 @@ def theory1():
                 k += 1
                 l -= 1
             while (k <= 3 and l >= 0):
-                E.add_constraint(Queen("Q", (k, l))) >> (
-                    Attack("A", (k, l))
+                E.add_constraint(Queen("Q", (k, l)) >> (
+                    Attack("A", (k, l)))
                 )
                 k += 1
                 l -= 1
@@ -258,8 +258,8 @@ def theory1():
                 k += 1
                 l -= 1
             while (k >= 0 and l <= 3):
-                E.add_constraint(Queen("Q", (k, l))) >> (
-                    Attack("A", (k, l))
+                E.add_constraint(Queen("Q", (k, l)) >> (
+                    Attack("A", (k, l)))
                 )
                 k -= 1
                 l += 1
@@ -269,23 +269,23 @@ def theory1():
                 k -= 1
                 l -= 1
             while (k >= 0 and l >= 0):
-                E.add_constraint(Queen("Q", (k, l))) >> (
-                    Attack("A", (k, l))
+                E.add_constraint(Queen("Q", (k, l)) >> (
+                    Attack("A", (k, l)))
                 )
                 k -= 1
                 l -= 1
             l = x
             k = y
             for i in range(1, N):
-                E.add_constraint(Queen("Q", (k, l))) >> (
+                E.add_constraint(Queen("Q", (k, l)) >> (
                     Attack("A", (k, i))
                     | Attack("A", (i, l))
                     | Attack("A", (k, -i))
                     | Attack("A", (-i, l))
-                )
+                ))
     for i in range(N):
         for j in range(N):
-            # I do not understand this constraint Please specify what does this constraint do
+            # At any coordinate (i,j) it can either be Empty, Attack, King, Bishop, Rooke, Knight, or Queen
             E.add_constraint(Empty("_", (i, j)) | Attack("A", (i, j)) | King("K", (i, j)) | Bishop(
                 "B", (i, j)) | Rooke("R", (i, j)) | Knight("N", (i, j)) | Queen("Q", (i, j)))
 
@@ -329,22 +329,26 @@ def theory1():
 if __name__ == "__main__":
     T = theory1()
     T = T.compile()
+    solution = T.solve()
+    print("\nSatisfiable: %s" % T.satisfiable())
+    # print("# Solutions: %d" % count_solutions(T))
 
     board = makeBoard()
     printBoard(board)
 
-    print("\nSatisfiable: %s" % T.satisfiable())
-    # print("# Solutions: %d" % count_solutions(T))
-    solution = T.solve()
     print(len(solution.keys()))
     print_theory(solution, "truth")
-    for i in solution.keys():
-        if solution[i] == True:
-            print(i.coordinates)
-    # print(solution[Attack(0, 1)])
+    # for i in solution.keys():
+    #     if solution[i] == True:
+    #         print(i.coordinates)
     # print("   Solution: %s" % T.solve())
-    # print("\nVariable likelihoods:")
+
+
+    # print("\nVariable likelihoods:")    
     # for v,vn in zip([a,b,c,x,y,z], 'abcxyz'):
     #     # Ensure that you only send these functions NNF formulas
     #     # Literals are compiled to NNF here
     #     print(" %s: %.2f" % (vn, likelihood(T, v)))
+
+
+

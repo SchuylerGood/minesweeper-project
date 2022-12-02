@@ -289,6 +289,18 @@ def theory1():
             E.add_constraint(Empty("_", (i, j)) | Attack("A", (i, j)) | King("K", (i, j)) | Bishop(
                 "B", (i, j)) | Rooke("R", (i, j)) | Knight("N", (i, j)) | Queen("Q", (i, j)))
 
+            # The following constraints checks only one piece (either K, B, R, Q) be at one positon (i,j)
+            E.add_constraint(King("K", (i, j)) & ~Bishop("B", (i, j)) & ~Rooke(
+                "R", (i, j)) & ~Knight("N", (i, j)) & ~Queen("Q", (i, j)))
+            E.add_constraint(~King("K", (i, j)) & Bishop("B", (i, j)) & ~Rooke(
+                "R", (i, j)) & ~Knight("N", (i, j)) & ~Queen("Q", (i, j)))
+            E.add_constraint(~King("K", (i, j)) & ~Bishop("B", (i, j)) & Rooke(
+                "R", (i, j)) & ~Knight("N", (i, j)) & ~Queen("Q", (i, j)))
+            E.add_constraint(~King("K", (i, j)) & ~Bishop("B", (i, j)) & ~Rooke(
+                "R", (i, j)) & Knight("N", (i, j)) & ~Queen("Q", (i, j)))
+            E.add_constraint(~King("K", (i, j)) & ~Bishop("B", (i, j)) & ~Rooke(
+                "R", (i, j)) & ~Knight("N", (i, j)) & Queen("Q", (i, j)))
+
             # This constraint says that if we have King(i,j), Bishop(i,j), Queens(i,j) or Rooke(i,j) at implies to  Piece(i,j)
             E.add_constraint(King("K", (i, j)) | Bishop("B", (i, j)) | Rooke(
                 "R", (i, j)) | Knight("N", (i, j)) | Queen("Q", (i, j)) >> Piece("P", (i, j)))
@@ -306,18 +318,6 @@ def theory1():
             # This is constraint says that at any position only one state of square is true that is is can be either (P, A, E) ( I used XOR to say it)
             E.add_constraint(Piece("P", (i, j)) & ~Attack("A", (i, j)) & ~Empty("_", (i, j)) | ~Piece("P", (i, j)) & Attack(
                 "A", (i, j)) & ~Empty("_", (i, j)) | ~Piece("P", (i, j)) & ~Attack("A", (i, j)) & Empty("_", (i, j)))
-
-            # The following constraints checks only one piece (either K, B, R, Q) be at one positon (i,j)
-            E.add_constraint(King("K", (i, j)) & ~Bishop("B", (i, j)) & ~Rooke(
-                "R", (i, j)) & ~Knight("N", (i, j)) & ~Queen("Q", (i, j)))
-            E.add_constraint(~King("K", (i, j)) & Bishop("B", (i, j)) & ~Rooke(
-                "R", (i, j)) & ~Knight("N", (i, j)) & ~Queen("Q", (i, j)))
-            E.add_constraint(~King("K", (i, j)) & ~Bishop("B", (i, j)) & Rooke(
-                "R", (i, j)) & ~Knight("N", (i, j)) & ~Queen("Q", (i, j)))
-            E.add_constraint(~King("K", (i, j)) & ~Bishop("B", (i, j)) & ~Rooke(
-                "R", (i, j)) & Knight("N", (i, j)) & ~Queen("Q", (i, j)))
-            E.add_constraint(~King("K", (i, j)) & ~Bishop("B", (i, j)) & ~Rooke(
-                "R", (i, j)) & ~Knight("N", (i, j)) & Queen("Q", (i, j)))
 
     constraint.implies_all(E)
     return E

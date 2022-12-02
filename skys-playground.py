@@ -338,9 +338,22 @@ if __name__ == "__main__":
 
     print(len(solution.keys()))
     print_theory(solution, "truth")
-    # for i in solution.keys():
-    #     if solution[i] == True:
-    #         print(i.coordinates)
+
+    list_of_cords = []
+
+    for i in solution.keys():
+        if solution[i] == True and i.coordinates[0] < N and i.coordinates[1] < N and i.coordinates[0] >= 0 and i.coordinates[1] >= 0:
+            list_of_cords.append((i, i.coordinates))
+
+    set_of_cords = set(list_of_cords)
+
+    # for i in range(len(list_of_cords)):
+
+    #     if list_of_cords[i][1]:
+    #         print(list_of_cords)
+
+    print(len(list_of_cords))
+    # print(solution[Attack(0, 1)])
     # print("   Solution: %s" % T.solve())
 
 

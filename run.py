@@ -3,7 +3,7 @@ from bauhaus.utils import count_solutions, likelihood
 import random
 import src.board as board
 
-N = 4
+N = 5
 
 E = Encoding()
 
@@ -171,13 +171,51 @@ def theory(pieces):
                     & Attack("A", (x + i, y + i)) #Down and right
                     & Attack("A", (x - i, y + i)) #Down and left
                 ))
-        
+
     #================= General Constraints ==================
 
-
-
-    #😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂 😂
-
+    for piece in pieces:
+        if piece.piece == "K":
+            E.add_constraint(
+                piece >>
+                  ~Rook("R", (x, y))
+                & ~Bishop("B", (x, y))
+                & ~Knight("H", (x, y))
+                & ~Queen("Q", (x, y))
+            )  
+        elif piece.piece == "R":
+            E.add_constraint(
+                piece >>
+                  ~King("K", (x, y))
+                & ~Bishop("B", (x, y))
+                & ~Knight("H", (x, y))
+                & ~Queen("Q", (x, y))
+            )
+        elif piece.piece == "B":
+            E.add_constraint(
+                piece >>
+                  ~King("K", (x, y))
+                & ~Rook("R", (x, y))
+                & ~Knight("H", (x, y))
+                & ~Queen("Q", (x, y))
+            )
+        elif piece.piece == "H":
+            E.add_constraint(
+                piece >>
+                  ~King("K", (x, y))
+                & ~Rook("R", (x, y))
+                & ~Bishop("B", (x, y))
+                & ~Queen("Q", (x, y))
+            )
+        elif piece.piece == "Q":
+            E.add_constraint(
+                piece >>
+                  ~King("K", (x, y))
+                & ~Rook("R", (x, y))
+                & ~Bishop("B", (x, y))
+                & ~Knight("H", (x, y))
+            )    
+    
     return E
 
 
@@ -279,11 +317,37 @@ def test2():
 
     return listToBauhaus(lis)
 
+def test3():
+    lis = [
+        ["_", "R", "_"],
+        ["K", "_", "_"],
+        ["_", "Q", "_"],
+    ]
+
+    for row in lis:
+        print(row)
+
+    return listToBauhaus(lis)
+
+def test4():
+    lis = [
+        ["B", "_", "_"],
+        ["_", "_", "R"],
+        ["_", "R", "_"],
+    ]
+
+    for row in lis:
+        print(row)
+
+    return listToBauhaus(lis)
+
 if __name__ == "__main__":
 
     print("\n\nIs this board a solution?\n")
 
-    pieces = test2()
+    #Change this to test different boards (test1() or test2())
+    pieces = test1()
+
     print(pieces)
     print()
 

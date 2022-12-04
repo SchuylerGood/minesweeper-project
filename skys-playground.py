@@ -129,13 +129,27 @@ def makeBoard():
 def printBoard(board):
     for i in range(N):
         for j in range(N):
-            print(board[i][j], end="  ")
+            if "Empty" in str(board[i][j]):
+                print(" _", end="  ")
+            elif "King" in str(board[i][j]):
+                print(" K", end="  ")
+            elif "Bishop" in str(board[i][j]):
+                print(" B", end="  ")
+            elif "Rook" in str(board[i][j]):
+                print(" R", end=" ")
+            elif "Knight" in str(board[i][j]):
+                print(" H", end="  ")
+            elif "Queen" in str(board[i][j]):
+                print(" Q", end="  ")
+            elif "Attack" in str(board[i][j]):
+                print(" X", end="  ")
         print(" ")
+
+
+
 # =================================
 # =====        THEORY        ======
 # =================================
-
-
 def theory1():
     # King Constraints
     for x in range(N):
@@ -330,42 +344,46 @@ if __name__ == "__main__":
 
     solution = T.solve()
     print("3. Theory Solution Found")
-    print("\n4. Satisfiable: %s" % T.satisfiable())
+    print("4. Satisfiable: %s\n" % T.satisfiable())
     # print("# Solutions: %d" % count_solutions(T))
-
-    # board = makeBoard()
-    # printBoard(board)
-
     # print_theory(solution, "truth")
     
-
-
-    # list_of_cords = []
-
+    list_of_cords = []
     for i in solution.keys():
+        list_of_cords.append((i, solution[i]))
+        # print(i, solution[i])
 
-        print(i, solution[i])
-    print(len(solution.keys()))
+    coords = []
+    pieces = []
+    for i in list_of_cords:
+        if i[1] == True:
+            if i[0].coordinates[0] >= 0 and i[0].coordinates[1] >= 0 and i[0].coordinates[0] < N and i[0].coordinates[1] < N:
+                if i[0].coordinates not in coords:
+                    coords.append(i[0].coordinates)
+                    pieces.append(i[0])
+
+    #print elements in coords as a chess board of size N
+    board = makeBoard()
+    for i in range(len(coords)):
+        board[coords[i][0]][coords[i][1]] = pieces[i]
+    
+    printBoard(board)
+
+
 
     # output all of the solutions to a text file
     # with open("output.txt", "w") as f:
     #     for i in solution.keys():
     #         f.write(str(i) + " " + str(solution[i]) + "\n")
 
+    # Prints the data to a txt file
     with open('your_file.txt', 'w') as f:
         for line in solution.keys():
             f.write(f"{line}\n")
 
 
 
-    # set_of_cords = set(list_of_cords)
-
-    # for i in range(len(list_of_cords)):
-
-    #     if list_of_cords[i][1]:
-    #         print(list_of_cords)
-
-    # print(len(list_of_cords))
+    
     # print(solution[Attack(0, 1)])
     # print("   Solution: %s" % T.solve())
 

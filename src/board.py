@@ -1,6 +1,6 @@
 class board():
 
-    def __init__(self, size, attacked, positions):
+    def __init__(self, size):
         """
         Initializes the board, also creates the rows and columns automatically.\n
         Parameters:\n
@@ -15,8 +15,6 @@ class board():
 
         if (size < 0):
             raise ValueError("size must be greater than or equal to 0")
-        self.attacked = attacked
-        self.positions = positions
         self.size = size
         self.b = []
         self.b = self.create_board(self.size)
@@ -125,13 +123,6 @@ class board():
                 "pos must not contain values less than zero or larger than board size.")
 
         return self.b[pos[0]][pos[1]]
-
-    def get_attacked(self):
-        return self.attacked
-
-    def get_positions(self):
-        return self.positions
-
 
 # if __name__ == "__main__":
 #     b = board(8, [], [])

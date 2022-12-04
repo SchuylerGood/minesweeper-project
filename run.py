@@ -1,13 +1,13 @@
 from bauhaus import Encoding, proposition, constraint
 from bauhaus.utils import count_solutions, likelihood
 import random
+import src.board as board
 
 N = 4
 
 E = Encoding()
 
 #============== Propositions ==================
-
 @proposition(E)
 class Attack:
     def __init__(self, piece, coordinates):
@@ -108,6 +108,9 @@ def theory(pieces):
         x = piece.coordinates[0]
         y = piece.coordinates[1]
 
+        #Make all the pieces in pieces true
+        E.add_constraint(piece)
+
         #King constraints
         if piece.piece == "K":
             E.add_constraint(King("K", (x, y)) >> (
@@ -139,9 +142,9 @@ def theory(pieces):
             for i in range(1, N):
                 E.add_constraint(Rook("R", (x, y)) >> (
                     Attack("A", (x + i, y)) #Right
-                    & Attack("A", (x, y - 1)) #Up
+                    & Attack("A", (x, y - i)) #Up
                     & Attack("A", (x - i, y)) #Left
-                    & Attack("A", (x, y + 1)) #Down
+                    & Attack("A", (x, y + i)) #Down
                 ))
 
         #Bishop constraints
@@ -214,11 +217,28 @@ def printBoard(board):
                 print(" X", end="  ")
         print(" ")
 
+def listToBauhaus(lis):
+    bauhaus = []
+    for y, row in enumerate(lis):
+        for x, elem in enumerate(row):
+            if elem == "K":
+                bauhaus.append(King("K", (x, y)))
+            elif elem == "B":
+                bauhaus.append(Bishop("B", (x, y)))
+            elif elem == "R":
+                bauhaus.append(Rook("R", (x, y)))
+            elif elem == "H":
+                bauhaus.append(Knight("H", (x, y)))
+            elif elem == "Q":
+                bauhaus.append(Queen("Q", (x, y)))
+    return bauhaus
 
-def determineValidity(attacks, pieces):
-    for attack in attacks:
-        if attack in pieces:
-            return False
+def determineValidity(solutions, pieces):
+    for p in solutions:
+        if p.piece == "A":
+            for piece in pieces:
+                if p.coordinates == piece.coordinates:
+                    return False
     return True
 
 def filterUsefull(solution):
@@ -233,21 +253,39 @@ def setBoard(listOfPropositions, board):
     for proposition in listOfPropositions:
         board[proposition.coordinates[1]][proposition.coordinates[0]] = proposition
 
+def test1():
+    lis = [
+        ["_", "H", "_", "_"],
+        ["_", "_", "_", "_"],
+        ["K", "Q", "_", "_"],
+        ["_", "_", "_", "B"],
+    ]
+
+    for row in lis:
+        print(row)
+
+    return listToBauhaus(lis)
+
+def test2():
+    lis = [
+        ["_", "_", "_", "_"],
+        ["_", "_", "R", "_"],
+        ["_", "R", "_", "_"],
+        ["H", "_", "_", "B"],
+    ]
+
+    for row in lis:
+        print(row)
+
+    return listToBauhaus(lis)
 
 if __name__ == "__main__":
-    # pieces = random.choices(["K", "H", "Q", "B", "R"], k = N)
-    pieces = ["Q"]
-    for i, piece in enumerate(pieces):
-        if piece == "K":
-            pieces[i] = King(piece, (random.randint(0, 3), i))
-        elif piece == "H":
-            pieces[i] = Knight(piece, (random.randint(0, 3), i))
-        elif piece == "Q":
-            pieces[i] = Queen(piece, (random.randint(0, 3), i))
-        elif piece == "B":
-            pieces[i] = Bishop(piece, (random.randint(0, 3), i))
-        elif piece == "R":
-            pieces[i] = Rook(piece, (random.randint(0, 3), i))
+
+    print("\n\nIs this board a solution?\n")
+
+    pieces = test2()
+    print(pieces)
+    print()
 
     T = theory(pieces) # Instantiates the theory 
     print(u'\u2713' + " ---> Theory Created")
@@ -258,14 +296,14 @@ if __name__ == "__main__":
     solution = T.solve() # Solves the theory
     print(u'\u2713' + " ---> Theory Solution Found")
     print(u'\u2713' + " ---> Theory Satisfiable: %s" % T.satisfiable())
-    
-    determineValidity(solution, pieces)
 
     writeSolutionToFile(solution, "Total_Solutions.txt") # Writes full list of bauhaus solutions to a file
     print(u'\u2713' + " ---> Solution Written to File")
-
     
-    board = makeBoard()
-    usefullCords = filterUsefull(solution)
-    setBoard(usefullCords, board)
-    printBoard(board)
+    result = determineValidity(solution, pieces)
+    print(u'\u2713' + " ---> Is Solution Valid: %s" % result)
+
+    if result:
+        print("This is a valid solution!\n\n")
+    else:
+        print("This is not a valid solution.\n\n")

@@ -32,7 +32,6 @@ class Empty:
     def __repr__(self):
         return f"Empty({self.coordinates[0]}, {self.coordinates[1]})"
 
-@constraint.at_most_k(E, N)
 @proposition(E)
 class Piece:
     def __init__(self, empty, coordinates):
@@ -43,7 +42,6 @@ class Piece:
         return f"Piece({self.coordinates[0]}, {self.coordinates[1]})"
 
 
-@constraint.implies_all(E, left=Piece)
 @proposition(E)
 class King:
     def __init__(self, piece, coordinates):
@@ -57,7 +55,6 @@ class King:
         return f"King({self.coordinates[0]}, {self.coordinates[1]})"
 
 
-@constraint.implies_all(E, left=Piece)
 @proposition(E)
 class Bishop:
     def __init__(self, piece, coordinates):
@@ -71,7 +68,6 @@ class Bishop:
         return f"Bishop({self.coordinates[0]}, {self.coordinates[1]})"
 
 
-@constraint.implies_all(E, left=Piece)
 @proposition(E)
 class Rook:
     def __init__(self, piece, coordinates):
@@ -85,7 +81,6 @@ class Rook:
         return f"Rook({self.coordinates[0]}, {self.coordinates[1]})"
 
 
-@constraint.implies_all(E, left=Piece)
 @proposition(E)
 class Knight:
     def __init__(self, piece, coordinates):
@@ -98,7 +93,6 @@ class Knight:
     def __call__(self):
         return f"Knight({self.coordinates[0]}, {self.coordinates[1]})"
 
-@constraint.implies_all(E, left=Piece)
 @proposition(E)
 class Queen:
     def __init__(self, piece, coordinates):
@@ -342,15 +336,27 @@ if __name__ == "__main__":
     # board = makeBoard()
     # printBoard(board)
 
-    print_theory(solution, "truth")
-    print(len(solution.keys()))
+    # print_theory(solution, "truth")
+    
 
 
     # list_of_cords = []
 
-    # for i in solution.keys():
-    #     if solution[i] == True and i.coordinates[0] < N and i.coordinates[1] < N and i.coordinates[0] >= 0 and i.coordinates[1] >= 0:
-    #         list_of_cords.append((i, i.coordinates))
+    for i in solution.keys():
+
+        print(i, solution[i])
+    print(len(solution.keys()))
+
+    # output all of the solutions to a text file
+    # with open("output.txt", "w") as f:
+    #     for i in solution.keys():
+    #         f.write(str(i) + " " + str(solution[i]) + "\n")
+
+    with open('your_file.txt', 'w') as f:
+        for line in solution.keys():
+            f.write(f"{line}\n")
+
+
 
     # set_of_cords = set(list_of_cords)
 

@@ -7,6 +7,7 @@ N = 4
 E = Encoding()
 
 #============== Propositions ==================
+# @constraint.at_most_k(E, N)
 @proposition(E)
 class Attack:
     def __init__(self, piece, coordinates):
@@ -78,7 +79,7 @@ class Knight:
     def __call__(self):
         return f"Knight({self.coordinates[0]}, {self.coordinates[1]})"
 
-@constraint.at_least_one(E)
+@constraint.at_most_k(E, N)
 @proposition(E)
 class Queen:
     def __init__(self, piece, coordinates):
@@ -102,62 +103,65 @@ class Queen:
 def theory():
 
     #================= Piece Constraints ==================
-    for x in range(N):
-        for y in range(N):
+    # for x in range(N):
+    #     for y in range(N):
 
-            #King constraints
-            E.add_constraint(King("K", (x, y)) >> (
-                  Attack("A", (x, y + 1))
-                & Attack("A", (x, y - 1))
-                & Attack("A", (x + 1, y))
-                & Attack("A", (x - 1, y))
-                & Attack("A", (x + 1, y + 1))
-                & Attack("A", (x + 1, y - 1))
-                & Attack("A", (x - 1, y + 1))
-                & Attack("A", (x - 1, y - 1))
-            ))
+    x = 0
+    y = 0
 
-            #Knight constraints
-            E.add_constraint(Knight("H", (x, y)) >> (
-                  Attack("A", (x + 2, y + 1))
-                & Attack("A", (x + 2, y - 1))
-                & Attack("A", (x - 2, y + 1))
-                & Attack("A", (x - 2, y - 1))
-                & Attack("A", (x + 1, y + 2))
-                & Attack("A", (x + 1, y - 2))
-                & Attack("A", (x - 1, y + 2))
-                & Attack("A", (x - 1, y - 2))
-            ))
+    # #King constraints
+    # E.add_constraint(King("K", (x, y)) >> (
+    #         Attack("A", (x, y + 1))
+    #     & Attack("A", (x, y - 1))
+    #     & Attack("A", (x + 1, y))
+    #     & Attack("A", (x - 1, y))
+    #     & Attack("A", (x + 1, y + 1))
+    #     & Attack("A", (x + 1, y - 1))
+    #     & Attack("A", (x - 1, y + 1))
+    #     & Attack("A", (x - 1, y - 1))
+    # ))
 
-            for i in range(1, N):
-                #Rook constraints
-                E.add_constraint(Rook("R", (x, y)) >> (
-                      Attack("A", (x + i, y)) #Right
-                    & Attack("A", (x, y - 1)) #Up
-                    & Attack("A", (x - i, y)) #Left
-                    & Attack("A", (x, y + 1)) #Down
-                ))
+    # #Knight constraints
+    # E.add_constraint(Knight("H", (x, y)) >> (
+    #         Attack("A", (x + 2, y + 1))
+    #     & Attack("A", (x + 2, y - 1))
+    #     & Attack("A", (x - 2, y + 1))
+    #     & Attack("A", (x - 2, y - 1))
+    #     & Attack("A", (x + 1, y + 2))
+    #     & Attack("A", (x + 1, y - 2))
+    #     & Attack("A", (x - 1, y + 2))
+    #     & Attack("A", (x - 1, y - 2))
+    # ))
 
-                #Bishop constraints
-                E.add_constraint(Bishop("B", (x, y)) >> (
-                      Attack("A", (x + i, y - i)) #Up and right
-                    & Attack("A", (x - i, y - i)) #Up and left
-                    & Attack("A", (x + i, y + i)) #Down and right
-                    & Attack("A", (x - i, y + i)) #Down and left
-                ))
+    for i in range(1, N):
+    #     #Rook constraints
+    #     E.add_constraint(Rook("R", (x, y)) >> (
+    #             Attack("A", (x + i, y)) #Right
+    #         & Attack("A", (x, y - 1)) #Up
+    #         & Attack("A", (x - i, y)) #Left
+    #         & Attack("A", (x, y + 1)) #Down
+    #     ))
 
-                #Queen constraints
-                E.add_constraint(Queen("Q", (x, y)) >> (
-                      Attack("A", (x + i, y)) #Right
-                    & Attack("A", (x, y - 1)) #Up
-                    & Attack("A", (x - i, y)) #Left
-                    & Attack("A", (x, y + 1)))) #Down
-                E.add_constraint(Queen("Q", (x, y)) >> (
-                      Attack("A", (x + i, y - i)) #Up and right
-                    & Attack("A", (x - i, y - i)) #Up and left
-                    & Attack("A", (x + i, y + i)) #Down and right
-                    & Attack("A", (x - i, y + i)) #Down and left
-                ))
+    #     #Bishop constraints
+    #     E.add_constraint(Bishop("B", (x, y)) >> (
+    #             Attack("A", (x + i, y - i)) #Up and right
+    #         & Attack("A", (x - i, y - i)) #Up and left
+    #         & Attack("A", (x + i, y + i)) #Down and right
+    #         & Attack("A", (x - i, y + i)) #Down and left
+    #     ))
+
+        #Queen constraints
+        E.add_constraint(Queen("Q", (x, y)) >> (
+                Attack("A", (x + i, y)) #Right
+            & Attack("A", (x, y - 1)) #Up
+            & Attack("A", (x - i, y)) #Left
+            & Attack("A", (x, y + 1)))) #Down
+        E.add_constraint(Queen("Q", (x, y)) >> (
+                Attack("A", (x + i, y - i)) #Up and right
+            & Attack("A", (x - i, y - i)) #Up and left
+            & Attack("A", (x + i, y + i)) #Down and right
+            & Attack("A", (x - i, y + i)) #Down and left
+        ))
         
     #================= General Constraints ==================
 
@@ -211,6 +215,29 @@ def determineValidity(attacks, pieces):
             return False
     return True
 
+def filterUsefull(solution):
+    validCoords = []
+    for line in solution.keys():
+        if solution[line] == True:
+            if line.coordinates[0] < N and line.coordinates[1] < N and line.coordinates[0] >= 0 and line.coordinates[1] >= 0:
+                validCoords.append(line)
+    return validCoords
+
+def setBoard(listOfPropositions, board):
+    for proposition in listOfPropositions:
+        if "K" in str(proposition):
+            board[proposition.coordinates[0]][proposition.coordinates[1]] = proposition
+        elif "H" in str(proposition):
+            board[proposition.coordinates[0]][proposition.coordinates[1]] = proposition
+        elif "Q" in str(proposition):
+            board[proposition.coordinates[0]][proposition.coordinates[1]] = proposition
+        elif "B" in str(proposition):
+            board[proposition.coordinates[0]][proposition.coordinates[1]] = proposition
+        elif "R" in str(proposition):
+            board[proposition.coordinates[0]][proposition.coordinates[1]] = proposition
+        elif "A" in str(proposition):
+            board[proposition.coordinates[0]][proposition.coordinates[1]] = proposition
+
 
 if __name__ == "__main__":
     pieces = random.choices(["K", "H", "Q", "B", "R"], k = N)
@@ -227,5 +254,12 @@ if __name__ == "__main__":
     
     determineValidity(solution, pieces)
 
-    writeSolutionToFile(solution, "Total Solutions") # Writes full list of bauhaus solutions to a file
+    writeSolutionToFile(solution, "Total_Solutions.txt") # Writes full list of bauhaus solutions to a file
     print(u'\u2713' + " ---> Solution Written to File")
+
+    
+    board = makeBoard()
+    usefullCords = filterUsefull(solution)
+    setBoard(usefullCords, board)
+    printBoard(board)
+

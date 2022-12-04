@@ -345,7 +345,7 @@ if __name__ == "__main__":
 
     print("\n\nIs this board a solution?\n")
 
-    #Change this to test different boards (test1() or test2())
+    #Change this to test different boards (1 - 4)
     pieces = test1()
 
     print(pieces)
